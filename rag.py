@@ -1,4 +1,3 @@
-from llama_index.core.readers import SimpleDirectoryReader
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.core import  VectorStoreIndex, StorageContext, load_index_from_storage
 from llama_index.core.postprocessor import SimilarityPostprocessor
@@ -48,7 +47,7 @@ class WikiRAG:
             self.index = self.load_index(self.config['index_path'])
 
 
-        self.query_engine = self.build_query_engine(k = self.config['k'])
+        self.query_engine = self.build_query_engine()
 
     def build_index(self, index_path):
         print("building the vector index")
