@@ -40,6 +40,10 @@ class WikiRAG:
             tokenizer_name=self.config['llm'],
             model_kwargs = kwargs,
             tokenizer_kwargs={"token": os.environ['HF_TOKEN']},
+            generate_kwargs={
+                "do_sample": True,
+                "temperature": self.config['temperature']
+            }
         )
         if not os.path.exists(self.config['index_path']):
             self.index = self.build_index(self.config['index_path'])
@@ -74,11 +78,9 @@ class WikiRAG:
                                         response_mode="compact",
                                         node_postprocessors=[SimilarityPostprocessor(similarity_cutoff=self.config['similarity_cutoff'])])
     def query(self, prompt):
-        # refresh the vector index and then answer the query
         wikipedia_links = search_wikipedia(prompt,n_articles=self.config['n_articles'])
         page_titles = fetch_wikipedia_pages(wikipedia_links,self.index)
         print(f"fetched the following wikipedia pages: {page_titles}")
         response = self.query_engine.query(prompt)
-        answer = response.text
-        context = [node.dict()['node']['text'] for node in response.source_nodes]
-        return answer,context
+        contexts = [node.dict()['node']['text'] for node in response.source_nodes]
+        return response.response , contexts
