@@ -6,7 +6,7 @@ WikiQA is a Retrieval-Augmented Generation (RAG) pipeline built for answering qu
 
 ---
 
-## Libraries:
+## Libraries
 
 - **Gemini**: Used for generating an eval dataset and as a judge.
 - **LlamaIndex**: Core framework for building the RAG pipeline.
